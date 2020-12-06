@@ -10,7 +10,7 @@ import model.Customer;
 import java.util.stream.IntStream;
 
 public class CustomerDao {
-	/*
+/*
 	 * This class handles all the database operations related to the customer table
 	 */
 	
@@ -29,28 +29,40 @@ public class CustomerDao {
 		 * Each record is required to be encapsulated as a "Customer" class object and added to the "customers" List
 		 */
 		
-		/*Sample data begins*/
-		for (int i = 0; i < 10; i++) {
-			Customer customer = new Customer();
-			customer.setUserID("111-11-1111");
-			customer.setUserSSN("112-11-1111");
-			customer.setFirstName("Shiyong");
-			customer.setLastName("Lu");
-			customer.setAddress("123 Success Street12");
-			customer.setCity("Stony Brook");
-			customer.setState("NY");
-			customer.setZipCode(11790);
-			customer.setTelephone("5166328959");
-			customer.setEmail("shiyong@cs.sunysb.edu");
-			customer.setAccNum("12345");
-			customer.setAccCreateDate("12-12-2020");
-			customer.setCreditCard("1234567812345678");
-			customer.setPpp("User");
-			customer.setRating(1);
-			customer.setDateLastActive("12-12-2020");
-			customers.add(customer);
+		try {
+
+		    Class.forName("com.mysql.jdbc.Driver");
+		    System.out.println("Connecting to a selected database...");
+		    Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/jeguan","root","badpassword");
+		    System.out.println("Connected database successfully...");
+			Statement st=con.createStatement();
+			ResultSet rs=st.executeQuery("SELECT P.*, U.PPP, U.Rating, U.DateOfLastAct, A.CardNumber, A.AcctNum, A.AcctCreationDate  FROM user U, person P, account A WHERE U.SSN = P.SSN AND P.SSN = A.OwnerSSN;");
+			
+			while(rs.next()) {
+				Customer customer = new Customer();
+				customer.setUserID(rs.getString("SSN"));
+				customer.setUserSSN(rs.getString("SSN"));
+				customer.setEmail(rs.getString("Email"));
+				customer.setFirstName(rs.getString("FirstName"));
+				customer.setLastName(rs.getString("LastName"));
+				customer.setAddress(rs.getString("Street"));
+				customer.setCity(rs.getString("City"));
+				customer.setState(rs.getString("State"));
+				customer.setZipCode(rs.getInt("Zipcode"));
+				customer.setTelephone(rs.getString("Telephone"));
+				customer.setPpp(rs.getString("PPP"));
+				customer.setRating(Integer.valueOf(rs.getString("Rating")));
+				customer.setDateLastActive(rs.getString("DateOfLastAct"));
+				customer.setAccNum(rs.getString("AcctNum"));
+				customer.setAccCreateDate(rs.getString("AcctCreationDate"));
+				customer.setCreditCard(rs.getString("CardNumber"));
+
+				customers.add(customer);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		/*Sample data ends*/
 		
 		return customers;
 	}
@@ -66,20 +78,33 @@ public class CustomerDao {
 		
 		List<Customer> customers = new ArrayList<Customer>();
 		
-		/*Sample data begins*/
-		for (int i = 0; i < 10; i++) {
-			Customer customer = new Customer();
-			customer.setUserID("111-11-1111");
-			customer.setAddress("123 Success Street");
-			customer.setLastName("Lu");
-			customer.setFirstName("Shiyong");
-			customer.setCity("Stony Brook");
-			customer.setState("NY");
-			customer.setEmail("shiyong@cs.sunysb.edu");
-			customer.setZipCode(11790);
-			customers.add(customer);			
+		
+		try {
+
+		    Class.forName("com.mysql.jdbc.Driver");
+		    System.out.println("Connecting to a selected database...");
+		    Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/jeguan","root","badpassword");
+		    System.out.println("Connected database successfully...");
+			Statement st=con.createStatement();
+			ResultSet rs=st.executeQuery("SELECT P.SSN, P.FirstName, P.LastName, P.Street, P.City, P.State, P.Zipcode, P.Email FROM person P, user U WHERE U.SSN = P.SSN");
+			
+			while(rs.next()) {
+				Customer customer = new Customer();
+				customer.setUserID(rs.getString("SSN"));
+				customer.setEmail(rs.getString("Email"));
+				customer.setFirstName(rs.getString("FirstName"));
+				customer.setLastName(rs.getString("LastName"));
+				customer.setAddress(rs.getString("Street"));
+				customer.setCity(rs.getString("City"));
+				customer.setState(rs.getString("State"));
+				customer.setZipCode(rs.getInt("Zipcode"));
+
+				customers.add(customer);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		/*Sample data ends*/
 		
 		return customers;
 	}
@@ -92,21 +117,34 @@ public class CustomerDao {
 		 * The students code to fetch data from the database will be written here
 		 * The customer record is required to be encapsulated as a "Customer" class object
 		 */
-		
-		/*Sample data begins*/
 		Customer customer = new Customer();
-		customer.setUserID("111-11-1111");
-		customer.setAddress("123 Success Street");
-		customer.setLastName("Lu");
-		customer.setFirstName("Shiyong");
-		customer.setCity("Stony Brook");
-		customer.setState("NY");
-		customer.setEmail("shiyong@cs.sunysb.edu");
-		customer.setZipCode(11790);
-		customer.setTelephone("5166328959");
-		customer.setCreditCard("1234567812345678");
-		customer.setRating(1);
-		/*Sample data ends*/
+		
+		try {
+
+		    Class.forName("com.mysql.jdbc.Driver");
+		    System.out.println("Connecting to a selected database...");
+		    Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/jeguan","root","badpassword");
+		    System.out.println("Connected database successfully...");
+			PreparedStatement st= con.prepareStatement("SELECT P.SSN, P.FirstName, P.LastName, P.Street, P.City, P.State, P.Zipcode, P.Email, P.Telephone, U.Rating, A.CardNumber FROM person P, user U, account A WHERE P.SSN = U.SSN AND A.OwnerSSN = P.SSN AND P.SSN = ?;");
+			st.setString(1, customerID);
+			ResultSet rs=st.executeQuery();
+
+			
+			customer.setUserID(rs.getString("SSN"));
+			customer.setEmail(rs.getString("Email"));
+			customer.setFirstName(rs.getString("FirstName"));
+			customer.setLastName(rs.getString("LastName"));
+			customer.setAddress(rs.getString("Street"));
+			customer.setCity(rs.getString("City"));
+			customer.setState(rs.getString("State"));
+			customer.setZipCode(rs.getInt("Zipcode"));
+			customer.setTelephone(rs.getString("Telephone"));
+			customer.setRating(Integer.valueOf(rs.getString("Rating")));
+			customer.setCreditCard(rs.getString("CardNumber"));
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 		return customer;
 	}
