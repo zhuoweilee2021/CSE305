@@ -43,7 +43,7 @@
 		</div>
 	  <div class="form-group">
 	    <label for="employeeEmail">Email address</label>
-	    <input type="email" class="form-control" id="employeeEmail" name="employeeEmail" placeholder="Enter email" value=${editEmployee.email} required>
+	    <input type="email" class="form-control" id="employeeEmail" name="employeeEmail" placeholder="Enter email" value='${editEmployee.email}' required>
 	  </div>
   	  <div class="form-group">
 	    <label for="employeeFirstName">First Name</label>
@@ -69,7 +69,7 @@
 	  </div>
    	  <div class="form-group">
 	    <label for="employeeZipcode">Zipcode</label>
-	    <input type="text" class="form-control" id="employeeZipcode" name="employeeZipcode" placeholder="Zipcode" value=${editEmployee.zipCode} required>
+	    <input type="text" class="form-control" id="employeeZipcode" name="employeeZipcode" placeholder="Zipcode" value='${editEmployee.zipCode}' required>
 	  </div>
    	  <div class="form-group">
 	    <label for="employeeTelephone">Telephone</label>
@@ -77,15 +77,15 @@
 	  </div>
    	  <div class="form-group">
 	    <label for="employeeSSN">SSN (Employee ID)</label>
-	    <input type="text" class="form-control" id="employeeSSN" name="employeeSSN" placeholder="XXX-XX-XXXX" value=${editEmployee.employeeID} readonly>
+	    <input type="text" class="form-control" id="employeeSSN" name="employeeSSN" placeholder="XXX-XX-XXXX" value='${editEmployee.employeeID}' readonly>
 	  </div>
    	  <div class="form-group">
 	    <label for="employeeStartDate">Start Date</label>
-	    <input type="text" class="form-control" id="employeeStartDate" name="employeeStartDate" placeholder="YYYY-MM-DD" value=${editEmployee.startDate} required>
+	    <input type="text" class="form-control" id="employeeStartDate" name="employeeStartDate" placeholder="YYYY-MM-DD" value='${editEmployee.startDate}' required>
 	  </div>
    	  <div class="form-group">
 	    <label for="employeeHourlyRate">Hourly Rate</label>
-	    <input type="text" class="form-control" id="employeeHourlyRate" name="employeeHourlyRate" placeholder="Hourly Rate" value=${editEmployee.hourlyRate} required>
+	    <input type="text" class="form-control" id="employeeHourlyRate" name="employeeHourlyRate" placeholder="Hourly Rate" value='${editEmployee.hourlyRate}' required>
 	  </div>
 			</div>
 
