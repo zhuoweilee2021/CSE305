@@ -161,7 +161,7 @@ public class CustomerDao {
 
 		    Class.forName("com.mysql.jdbc.Driver");
 		    System.out.println("Connecting to a selected database...");
-		    Connection con = DriverManager.getConnection("jdbc:mysql://mysql4.cs.stonybrook.edu:3306/jeguan","jeguan","111681093");
+		    Connection con = DriverManager.getConnection("jdbc:mysql://mysql4.cs.stonybrook.edu:3306/jeguan","root","badpassword");
 		    System.out.println("Connected database successfully...");
 		    PreparedStatement st= con.prepareStatement("delete from person where ssn=?");
 		    st.setString(1,customerID);
@@ -186,8 +186,21 @@ public class CustomerDao {
 		 * username, which is the email address of the customer, who's ID has to be returned, is given as method parameter
 		 * The Customer's ID is required to be returned as a String
 		 */
-
-		return "111-11-1111";
+		
+		String id="";
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/jeguan","root","badpassword");
+			PreparedStatement st= con.prepareStatement("select ssn from person where email=?");
+		    st.setString(1,username);
+		    ResultSet rs = st.executeQuery();
+			
+			id=rs.getString("SSN");
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return id;
 	}
 
 
