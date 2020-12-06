@@ -16,15 +16,6 @@ public class Employee {
     private String email;
     private String telephone;
     private String revenue;
-    private String password;
-    
-    public void setPassword(String password) {
-    	this.password = password;
-    }
-    
-    public String getPassword() {
-    	return password;
-    }
 
     public String getRevenue() {
         return revenue;

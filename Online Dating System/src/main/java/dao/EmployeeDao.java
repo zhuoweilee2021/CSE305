@@ -33,7 +33,7 @@ public class EmployeeDao {
 			float rate=employee.getHourlyRate();
 			Date startdate=Date.valueOf(employee.getStartDate());
 			String email=employee.getEmail();
-			String password=employee.getPassword();
+//			String password=employee.getPassword();
 			String firstName= employee.getFirstName();
 			String lastName= employee.getLastName();
 			String street= employee.getAddress();
@@ -42,17 +42,17 @@ public class EmployeeDao {
 			int zip=employee.getZipCode();
 			String phone=employee.getTelephone();
 			
-			PreparedStatement st2=con.prepareStatement("insert into person(`SSN`, `Password`, `FirstName`, `LastName`,`Street`, `City`,`State`,`Zipcode`,`Email`,`Telephone`) values(?,?,?,?,?,?,?,?,?,?)");
+			PreparedStatement st2=con.prepareStatement("insert into person(`SSN`, `FirstName`, `LastName`,`Street`, `City`,`State`,`Zipcode`,`Email`,`Telephone`) values(?,?,?,?,?,?,?,?,?)");
 			st2.setString(1, id);
-			st2.setString(2, password);
-			st2.setString(3, firstName);
-			st2.setString(4, lastName);
-			st2.setString(5,street);
-			st2.setString(6,city);
-			st2.setString(7,state);
-			st2.setInt(8, zip);
-			st2.setString(9, email);
-			st2.setString(10, phone);
+//			st2.setString(2, password);
+			st2.setString(2, firstName);
+			st2.setString(3, lastName);
+			st2.setString(4,street);
+			st2.setString(5,city);
+			st2.setString(6,state);
+			st2.setInt(7, zip);
+			st2.setString(8, email);
+			st2.setString(9, phone);
 			st2.executeUpdate();
 			
 			
@@ -96,7 +96,6 @@ public class EmployeeDao {
 			float rate=employee.getHourlyRate();
 			Date startdate=Date.valueOf(employee.getStartDate());
 			String email=employee.getEmail();
-			String password=employee.getPassword();
 			String firstName= employee.getFirstName();
 			String lastName= employee.getLastName();
 			String street= employee.getAddress();
