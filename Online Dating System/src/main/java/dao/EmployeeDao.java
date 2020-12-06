@@ -25,7 +25,7 @@ public class EmployeeDao {
 
 		    Class.forName("com.mysql.jdbc.Driver");
 		    System.out.println("Connecting to a selected database...");
-		    Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/jeguan","root","password");
+		    Connection con = DriverManager.getConnection("jdbc:mysql://mysql4.cs.stonybrook.edu:3306/jeguan","jeguan","111681093");
 		    System.out.println("Connected database successfully...");
 		    
 			String id=employee.getEmployeeID();
@@ -42,7 +42,7 @@ public class EmployeeDao {
 			int zip=employee.getZipCode();
 			String phone=employee.getTelephone();
 			
-			PreparedStatement st2=con.prepareStatement("insert into person(`SSN`, `Password`, `FirstName`, `LastName`,`Street`, `City`,`State`,`Zipcode`,`Email`,`Telephone`) values(?,?,?,?,?,?,?,?,?,?)");
+			PreparedStatement st2=con.prepareStatement("insert into person(SSN, Password, FirstName, LastName,`Street`, City,`State`,`Zipcode`,`Email`,`Telephone`) values(?,?,?,?,?,?,?,?,?,?)");
 			st2.setString(1, id);
 			st2.setString(2, password);
 			st2.setString(3, firstName);
@@ -56,7 +56,7 @@ public class EmployeeDao {
 			st2.executeUpdate();
 			
 			
-			PreparedStatement st=con.prepareStatement("insert into employee(`SSN`, `Role`, `StartDate`, `HourlyRate`) values(?,?,?,?)");
+			PreparedStatement st=con.prepareStatement("insert into employee(SSN, Role, StartDate, HourlyRate) values(?,?,?,?)");
 			st.setString(1,id);
 			st.setString(2,role);
 			st.setDate(3,startdate);
@@ -66,7 +66,7 @@ public class EmployeeDao {
 			
 			//moveToInsertRow() or moveToCurrentRow() MIGHT WANNA LOOK INTO THIS PUT IN A WHILE LOOP?
 		} catch(Exception e) {
-			e.printStackTrace();
+			System.out.println(e);
 			return "failure";
 		}
 		/*Sample data begins*/
@@ -88,8 +88,9 @@ public class EmployeeDao {
 
 		    Class.forName("com.mysql.jdbc.Driver");
 		    System.out.println("Connecting to a selected database...");
-		    Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/jeguan","root","password");
+		    Connection con = DriverManager.getConnection("jdbc:mysql://mysql4.cs.stonybrook.edu:3306/jeguan","jeguan","111681093");
 		    System.out.println("Connected database successfully...");
+		    
 		    
 		    String id=employee.getEmployeeID();
 		    String role=employee.getEmployeeRole();	
@@ -104,20 +105,20 @@ public class EmployeeDao {
 			String city= employee.getCity();
 			int zip=employee.getZipCode();
 			String phone=employee.getTelephone();
+			
 		    
-			PreparedStatement st2=con.prepareStatement("update person set FirstName=?, LastName=?, Street=?, City=?, State=?, Zipcode=?, Email=?, Telephone=? where ssn=?") ;
-//			st2.setString(1, password);
-			st2.setString(1, firstName);
-			st2.setString(2, lastName);
-			st2.setString(3,street);
-			st2.setString(4,city);
-			st2.setString(5,state);
-			st2.setInt(6, zip);
-			st2.setString(7, email);
-			st2.setString(8, phone);
-			st2.setString(9, id);
+			PreparedStatement st2=con.prepareStatement("update person set Password=?, FirstName=?, LastName=?, Street=?, City=?, State=?, Zipcode=?, Email=?, Telephone=? where ssn=?") ;
+			st2.setString(1, password);
+			st2.setString(2, firstName);
+			st2.setString(3, lastName);
+			st2.setString(4,street);
+			st2.setString(5,city);
+			st2.setString(6,state);
+			st2.setInt(7, zip);
+			st2.setString(8, email);
+			st2.setString(9, phone);
+			st2.setString(10, id);
 			st2.executeUpdate();
-		    st2.executeUpdate();
 		    
 		    PreparedStatement st=con.prepareStatement("update employee set Role=?, StartDate=?, HourlyRate=? where ssn=?");
 			st.setString(1,role);
@@ -127,7 +128,7 @@ public class EmployeeDao {
 			st.executeUpdate();
 		    
 		} catch(Exception e) {
-			e.printStackTrace();
+			System.out.println(e);
 			return "failure";
 		}
 		/*Sample data begins*/
@@ -146,18 +147,15 @@ public class EmployeeDao {
 
 		    Class.forName("com.mysql.jdbc.Driver");
 		    System.out.println("Connecting to a selected database...");
-		    Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/jeguan","root","password");
+		    Connection con = DriverManager.getConnection("jdbc:mysql://mysql4.cs.stonybrook.edu:3306/jeguan","jeguan","111681093");
 		    System.out.println("Connected database successfully...");
 		    System.out.println(employeeID);
-		    PreparedStatement st= con.prepareStatement("DELETE FROM employee WHERE SSN=?");
+		    PreparedStatement st= con.prepareStatement("delete from employee where ssn=?");
 		    st.setString(1,employeeID);
 		    st.executeUpdate();
-		    PreparedStatement st2= con.prepareStatement("DELETE FROM person WHERE SSN=?");
-		    st2.setString(1,employeeID);
-		    st2.executeUpdate();
 		    
 		} catch(Exception e) {
-			e.printStackTrace();
+			System.out.println(e);
 			return "failure";
 		}
 		/*Sample data begins*/
@@ -180,7 +178,7 @@ public class EmployeeDao {
 
 		    Class.forName("com.mysql.jdbc.Driver");
 		    System.out.println("Connecting to a selected database...");
-		    Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/jeguan","root","password");
+		    Connection con = DriverManager.getConnection("jdbc:mysql://mysql4.cs.stonybrook.edu:3306/jeguan","jeguan","111681093");
 		    System.out.println("Connected database successfully...");
 			Statement st=con.createStatement();
 			ResultSet rs=st.executeQuery("SELECT * FROM Employee E,Person P where E.SSN = P.SSN");
@@ -190,7 +188,7 @@ public class EmployeeDao {
 				employee.setEmployeeRole(rs.getString("Role"));
 				employee.setStartDate(String.valueOf(rs.getDate("StartDate")));
 				employee.setEmployeeID(rs.getString("SSN"));
-				employee.setHourlyRate(rs.getFloat("HourlyRate"));
+				employee.setHourlyRate(rs.getInt("HourlyRate"));
 				employee.setEmail(rs.getString("Email"));
 				employee.setFirstName(rs.getString("FirstName"));
 				employee.setLastName(rs.getString("LastName"));
@@ -203,7 +201,7 @@ public class EmployeeDao {
 			}
 			
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.out.println(e);
 		}
 
 		return employees;
@@ -221,14 +219,15 @@ public class EmployeeDao {
 		
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/jeguan","root","password");
-			PreparedStatement st= con.prepareStatement("SELECT * FROM Employee E,Person P where E.SSN = P.SSN AND E.SSN=?");
-			st.setString(1, employeeID);
-			ResultSet rs=st.executeQuery();
+		    Connection con = DriverManager.getConnection("jdbc:mysql://mysql4.cs.stonybrook.edu:3306/jeguan","jeguan","111681093");
+		    Statement st=con.createStatement();
+		    ResultSet rs=st.executeQuery("SELECT * FROM Employee E, Person P where E.SSN = P.SSN AND E.ssn like \'%"+employeeID+"%\'");
+
 			
 			while(rs.next()) {
+				System.out.println("hello1");
 				employee.setEmployeeID(rs.getString("SSN"));
-				employee.setHourlyRate(rs.getFloat("HourlyRate"));
+				employee.setHourlyRate(rs.getInt("HourlyRate"));
 				employee.setEmployeeRole(rs.getString("Role"));
 				employee.setStartDate(String.valueOf(rs.getDate("StartDate")));
 				employee.setEmail(rs.getString("Email"));
@@ -242,7 +241,7 @@ public class EmployeeDao {
 			}
 			
 		} catch(Exception e) {
-			e.printStackTrace();
+			System.out.println(e);
 		}
 		
 		return employee;
@@ -258,7 +257,7 @@ public class EmployeeDao {
 		String id="";
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/jeguan","root","password");
+		    Connection con = DriverManager.getConnection("jdbc:mysql://mysql4.cs.stonybrook.edu:3306/jeguan","jeguan","111681093");
 			Statement st=con.createStatement();
 			ResultSet rs=st.executeQuery("SELECT E.SSN FROM Employee E, Person P where E.SSN = P.SSN AND email like \'%"+username+"%\'");
 			
@@ -266,7 +265,7 @@ public class EmployeeDao {
 				id=rs.getString("SSN");
 			}
 		} catch(Exception e) {
-			e.printStackTrace();
+			System.out.println(e);
 		}
 		
 		return id;
