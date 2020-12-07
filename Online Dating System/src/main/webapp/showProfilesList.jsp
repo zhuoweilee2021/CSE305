@@ -89,7 +89,7 @@
 		         	<form method="POST" action="likeProfile">
 						<div class="form-group">
 							<input type="hidden" class="form-control" name="from" value=${email}>
-							<input type="hidden" class="form-control" name="to" value=${cd.profileID}>
+							<input type="hidden" class="form-control" name="to" value=${cd.profileName}>
 			        	</div>
 						<input type="submit" value="Like" class="btn btn-success"/>
 					</form>
