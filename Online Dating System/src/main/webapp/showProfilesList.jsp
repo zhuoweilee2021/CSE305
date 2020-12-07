@@ -35,9 +35,10 @@
 		      <th>Age</th>
 		      <th>Address</th>
 		      <th>Gender</th>
-		      <th>Phy Char</th>
+		      <th>Height</th>
+		      <th>Weight</th>
+		      <th>Hair Color</th>
 		      <th>Hobbies</th>
-			  <th>Photo</th>
 			  <th>Geo Range</th>
 			  <th>Age Range</th>
 			  <th>Refer to</th>
@@ -53,9 +54,10 @@
 		         <td>${cd.age}</td>
 		         <td>${cd.address}</td>
 		         <td>${cd.gender}</td>
-		         <td>${cd.phy_char}</td>
+		         <td>${cd.height}</td>
+		         <td>${cd.weight}</td>
+		         <td>${cd.hairColor}</td>
 		         <td>${cd.interests}</td>
-		         <td>${cd.photo}</td>
 		         <td>${cd.geoRange}</td>
 		         <td>${cd.ageRange}</td>
 				   <td>

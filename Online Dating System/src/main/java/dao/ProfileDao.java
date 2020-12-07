@@ -1,6 +1,7 @@
 package dao;
 
 import model.Customer;
+import java.sql.*;
 import model.Profile;
 
 import java.util.ArrayList;
@@ -12,116 +13,143 @@ public class ProfileDao {
      */
 
     public List<Profile> getProfiles() {
+    	
+    	List<Profile> profiles = new ArrayList<>();
+    	try {
 
-        /*Sample data begins*/
-        List<Profile> profiles = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            Profile profile = new Profile();
-            profile.setProfileID("123");
-            profile.setProfileName("Profile1");
-            profile.setAge("23");
-            profile.setAddress("address 11");
-            profile.setGender("Male");
-            profile.setPhy_char("Tall");
-            profile.setInterests("Guitar");
-            profile.setPhoto("Path to Photo");
-            profile.setGeoRange("25");
-            profile.setAgeRange("25 to 51");
-            profiles.add(profile);
-        }
-        /*Sample data ends*/
+		    Class.forName("com.mysql.jdbc.Driver");
+		    System.out.println("Connecting to a selected database...");
+		    Connection con = DriverManager.getConnection("jdbc:mysql://mysql4.cs.stonybrook.edu:3306/jeguan","jeguan","111681093");
+		    System.out.println("Connected database successfully...");
+		    Statement st= con.createStatement();
+		    ResultSet rs= st.executeQuery("SELECT ProfileID,OwnerSSN, DatingAgeRangeStart,DatingAgeRangeEnd,DatinGeoRange,M_F,Hobbies,Height,Weight,HairColor, Age,concat_ws(' ',Street,City,State,Zipcode) as Address FROM Profile A, Person B WHERE A.OwnerSSN=B.SSN");
+		    
+		    while(rs.next()) {
+	            Profile profile = new Profile();
+	            profile.setProfileID(rs.getString("OwnerSSN"));
+	            profile.setProfileName(rs.getString("ProfileID"));
+	            profile.setAge(String.valueOf(rs.getString("Age")));
+	            profile.setAddress(rs.getString("Address"));
+	            profile.setGender(rs.getString("M_F"));
+	            profile.setWeight(String.valueOf(rs.getInt("Weight")));
+	            profile.setHeight(String.valueOf(rs.getInt("Height")));
+	            profile.setHairColor(rs.getString("HairColor"));
+	            profile.setInterests(rs.getString("Hobbies"));
+	            profile.setPhoto(null);
+	            profile.setGeoRange(String.valueOf(rs.getInt("DatinGeoRange")));
+	            profile.setAgeRange(rs.getInt("DatingAgeRangeStart")+" to "+rs.getInt("DatingAgeRangeEnd"));
+	            profiles.add(profile);
+		    }
+		    
+    	} catch(Exception e) {
+    		System.out.println(e);
+    	}
 
         return profiles;
     }
 
     public List<Profile> getProfilesByAge(String age) {
 
-        /*Sample data begins*/
-        List<Profile> profiles = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            Profile profile = new Profile();
-            profile.setProfileID("123");
-            profile.setProfileName("Profile1");
-            profile.setAge("23");
-            profile.setAddress("address 11");
-            profile.setGender("Male");
-            profile.setPhy_char("Tall");
-            profile.setInterests("Guitar");
-            profile.setPhoto("Path to Photo");
-            profile.setGeoRange("25");
-            profile.setAgeRange("25 to 51");
-            profiles.add(profile);
-        }
-        /*Sample data ends*/
+    	List<Profile> profiles = new ArrayList<>();
+    	try {
+
+		    Class.forName("com.mysql.jdbc.Driver");
+		    System.out.println("Connecting to a selected database...");
+		    Connection con = DriverManager.getConnection("jdbc:mysql://mysql4.cs.stonybrook.edu:3306/jeguan","jeguan","111681093");
+		    System.out.println("Connected database successfully...");
+		    Statement st=con.createStatement();
+		    ResultSet rs=st.executeQuery("select ownerssn, profileid from profile where age like \'%"+age+"%\'");
+		    
+		    while(rs.next()) {
+	            Profile profile = new Profile();
+	            profile.setProfileID(rs.getString("OwnerSSN"));
+	            profile.setProfileName(rs.getString("ProfileID"));
+	            profiles.add(profile);
+		    }
+		    
+    	} catch(Exception e) {
+    		System.out.println(e);
+    	}
 
         return profiles;
     }
 
     public List<Profile> getProfilesByWeight(String weight) {
+    	
+    	
 
         /*Sample data begins*/
         List<Profile> profiles = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            Profile profile = new Profile();
-            profile.setProfileID("123");
-            profile.setProfileName("Profile1");
-            profile.setAge("23");
-            profile.setAddress("address 11");
-            profile.setGender("Male");
-            profile.setPhy_char("Tall");
-            profile.setInterests("Guitar");
-            profile.setPhoto("Path to Photo");
-            profile.setGeoRange("25");
-            profile.setAgeRange("25 to 51");
-            profiles.add(profile);
-        }
-        /*Sample data ends*/
+
+    	try {
+		    Class.forName("com.mysql.jdbc.Driver");
+		    System.out.println("Connecting to a selected database...");
+		    Connection con = DriverManager.getConnection("jdbc:mysql://mysql4.cs.stonybrook.edu:3306/jeguan","jeguan","111681093");
+		    System.out.println("Connected database successfully...");
+		    Statement st=con.createStatement();
+		    ResultSet rs=st.executeQuery("select ownerssn, profileid from profile where weight like \'%"+weight+"%\'");
+		    
+		    while(rs.next()) {
+	            Profile profile = new Profile();
+	            profile.setProfileID(rs.getString("OwnerSSN"));
+	            profile.setProfileName(rs.getString("ProfileID"));
+	            profiles.add(profile);
+		    }
+		    
+    	} catch(Exception e) {
+    		System.out.println(e);
+    	}
 
         return profiles;
     }
 
     public List<Profile> getProfilesByHeight(String height) {
 
-        /*Sample data begins*/
-        List<Profile> profiles = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            Profile profile = new Profile();
-            profile.setProfileID("123");
-            profile.setProfileName("Profile1");
-            profile.setAge("23");
-            profile.setAddress("address 11");
-            profile.setGender("Male");
-            profile.setPhy_char("Tall");
-            profile.setInterests("Guitar");
-            profile.setPhoto("Path to Photo");
-            profile.setGeoRange("25");
-            profile.setAgeRange("25 to 51");
-            profiles.add(profile);
-        }
-        /*Sample data ends*/
+    	List<Profile> profiles = new ArrayList<>();
 
+    	try {
+		    Class.forName("com.mysql.jdbc.Driver");
+		    System.out.println("Connecting to a selected database...");
+		    Connection con = DriverManager.getConnection("jdbc:mysql://mysql4.cs.stonybrook.edu:3306/jeguan","jeguan","111681093");
+		    System.out.println("Connected database successfully...");
+		    Statement st=con.createStatement();
+		    ResultSet rs=st.executeQuery("select ownerssn, profileid from profile where height like \'%"+height+"%\'");
+		    
+		    while(rs.next()) {
+	            Profile profile = new Profile();
+	            profile.setProfileID(rs.getString("OwnerSSN"));
+	            profile.setProfileName(rs.getString("ProfileID"));
+	            profiles.add(profile);
+		    }
+		    
+    	} catch(Exception e) {
+    		System.out.println(e);
+    	}
         return profiles;
     }
 
     public List<Profile> getProfilesByHairColor(String hairColor) {
 
-        /*Sample data begins*/
-        List<Profile> profiles = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            Profile profile = new Profile();
-            profile.setProfileID("123");
-            profile.setProfileName("Profile1");
-            profile.setAge("23");
-            profile.setAddress("address 11");
-            profile.setGender("Male");
-            profile.setPhy_char("Tall");
-            profile.setInterests("Guitar");
-            profile.setPhoto("Path to Photo");
-            profile.setGeoRange("25");
-            profile.setAgeRange("25 to 51");
-            profiles.add(profile);
-        }
-        /*Sample data ends*/
+    	List<Profile> profiles = new ArrayList<>();
+
+    	try {
+		    Class.forName("com.mysql.jdbc.Driver");
+		    System.out.println("Connecting to a selected database...");
+		    Connection con = DriverManager.getConnection("jdbc:mysql://mysql4.cs.stonybrook.edu:3306/jeguan","jeguan","111681093");
+		    System.out.println("Connected database successfully...");
+		    Statement st=con.createStatement();
+		    ResultSet rs=st.executeQuery("select ownerssn, profileid from profile where haircolor like \'%"+hairColor+"%\'");
+		    
+		    while(rs.next()) {
+	            Profile profile = new Profile();
+	            profile.setProfileID(rs.getString("OwnerSSN"));
+	            profile.setProfileName(rs.getString("ProfileID"));
+	            profiles.add(profile);
+		    }
+		    
+    	} catch(Exception e) {
+    		System.out.println(e);
+    	}
 
         return profiles;
     }

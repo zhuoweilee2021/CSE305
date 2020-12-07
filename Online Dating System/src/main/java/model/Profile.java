@@ -7,12 +7,38 @@ public class Profile {
 	private String age;
 	private String address;
 	private String gender;
-	private String phy_char;
+	private String height;
+	private String weight;
+	private String hairColor;
 	private String interests;
 	private String photo;
 	private String geoRange;
 	private String ageRange;
+	
+	public String getHeight() {
+		return this.height;
+	}
 
+	public void setHeight(String height) {
+		this.height=height;
+	}
+	
+	public String getWeight() {
+		return this.weight;
+	}
+	
+	public void setWeight(String weight) {
+		this.weight=weight;
+	}
+	
+	public String getHairColor() {
+		return this.hairColor;
+	}
+	
+	public void setHairColor(String haircolor) {
+		this.hairColor=haircolor;
+	}
+	
 	public String getProfileID() {
 		return profileID;
 	}
@@ -53,13 +79,13 @@ public class Profile {
 		this.gender = gender;
 	}
 
-	public String getPhy_char() {
-		return phy_char;
-	}
-
-	public void setPhy_char(String phy_char) {
-		this.phy_char = phy_char;
-	}
+//	public String getPhy_char() {
+//		return phy_char;
+//	}
+//
+//	public void setPhy_char(String phy_char) {
+//		this.phy_char = phy_char;
+//	}
 
 	public String getInterests() {
 		return interests;
