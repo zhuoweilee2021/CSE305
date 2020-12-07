@@ -329,15 +329,7 @@ public class CustomerDao {
 			
 			while(rs.next()) {
 				Customer customer = new Customer();
-				customer.setUserID(rs.getString("OwnerSSN"));
 				customer.setUserSSN(rs.getString("OwnerSSN"));
-				customer.setEmail(rs.getString("Email"));
-				customer.setFirstName(rs.getString("FirstName"));
-				customer.setLastName(rs.getString("LastName"));
-				customer.setAddress(rs.getString("Street"));
-				customer.setCity(rs.getString("City"));
-				customer.setState(rs.getString("State"));
-				customer.setZipCode(rs.getInt("Zipcode"));
 				customers.add(customer);
 			}
 			
@@ -416,27 +408,28 @@ public class CustomerDao {
 		 * Each record is required to be encapsulated as a "Customer" class object and added to the "customers" List
 		 */
 
-		/*Sample data begins*/
-		for (int i = 0; i < 10; i++) {
-			Customer customer = new Customer();
-			customer.setUserID("111-11-1111");
-			customer.setFirstName("long");
-			customer.setLastName("Lu");
-			customer.setAddress("123 Success Street12");
-			customer.setCity("Stony Brook");
-			customer.setState("NY");
-			customer.setZipCode(11790);
-			customer.setTelephone("5166328959");
-			customer.setEmail("shiyong@cs.sunysb.edu");
-			customer.setAccNum("12345");
-			customer.setAccCreateDate("12-12-2020");
-			customer.setCreditCard("1234567812345678");
-			customer.setPpp("User");
-			customer.setRating(1);
-			customer.setDateLastActive("12-12-2020");
-			customers.add(customer);
+		try {
+
+		    Class.forName("com.mysql.jdbc.Driver");
+		    System.out.println("Connecting to a selected database...");
+		    Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/jeguan","root","badpassword");
+		    System.out.println("Connected database successfully...");
+			PreparedStatement st= con.prepareStatement("SELECT S.Suggestion, SUM(S.Rating) as TotalRating FROM (SELECT D.Profile2 AS Suggestion, D.User2Rating AS Rating FROM jeguan.date D WHERE D.Profile1=? UNION ALL SELECT D.Profile1 AS Suggestion, D.User1Rating AS Rating FROM jeguan.date D WHERE D.Profile2=? ) S GROUP BY S.Suggestion ORDER BY SUM(S.Rating) DESC;");
+			st.setString(1, userID);
+			st.setString(2, userID);
+			ResultSet rs=st.executeQuery();
+
+			
+			while(rs.next()) {
+				Customer customer = new Customer();
+				customer.setUserID(rs.getString("Suggestion"));
+				customer.setRating(Integer.valueOf(rs.getString("TotalRating")));
+				customers.add(customer);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		/*Sample data ends*/
 
 		return customers;
 	}
