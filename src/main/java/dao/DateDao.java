@@ -280,7 +280,6 @@ public class DateDao {
 			st2.setString(2, dateID);
 			st2.executeUpdate();
 			
-			//moveToInsertRow() or moveToCurrentRow() MIGHT WANNA LOOK INTO THIS PUT IN A WHILE LOOP?
 		} catch(Exception e) {
 			e.printStackTrace();
 			return "failure";
@@ -290,7 +289,28 @@ public class DateDao {
     }
 
     public String getSalesReport(String month, String year) {
-        return "1211";
+    	
+    	Date date = new Date();
+    	
+    	try {
+
+		    Class.forName("com.mysql.jdbc.Driver");
+		    System.out.println("Connecting to a selected database...");
+		    Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/jeguan","root","badpassword");
+		    System.out.println("Connected database successfully...");
+		    
+			PreparedStatement st2=con.prepareStatement("select sum(BookingFee) AS sales from date where MONTH(Date_Time)=? AND YEAR(Date_Time)=?");
+			st2.setString(1, month);
+			st2.setString(2, year);
+			ResultSet rs = st2.executeQuery();
+		
+            date.setBookingfee(rs.getString("sales"));
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+    	
+        return date.getBookingfee();
     }
 
     public List<Date> getPendingDates(String user) {
