@@ -214,6 +214,41 @@ public class CustomerDao {
 		 * You need to handle the database insertion of the customer details and return "success" or "failure" based on result of the database insertion.
 		 */
 		
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/jeguan","root","badpassword");
+					
+			PreparedStatement st2=con.prepareStatement("insert into person(`SSN`, `FirstName`, `LastName`,`Street`, `City`,`State`,`Zipcode`,`Email`,`Telephone`) values(?,?,?,?,?,?,?,?,?)");
+			st2.setString(1, customer.getUserSSN());
+			st2.setString(2, customer.getFirstName());
+			st2.setString(3, customer.getLastName());
+			st2.setString(4, customer.getAddress());
+			st2.setString(5, customer.getCity());
+			st2.setString(6, customer.getState());
+			st2.setInt(7, customer.getZipCode());
+			st2.setString(8, customer.getEmail());
+			st2.setString(9, customer.getTelephone());
+			st2.executeUpdate();
+			
+			
+			PreparedStatement st=con.prepareStatement("insert into account(`OwnerSSN`, `CardNumber`, `AcctNum`, `AcctCreationDate`) values(?,?,?,?)");
+			st.setString(1, customer.getUserSSN());
+			st.setString(2, customer.getCreditCard());
+			st.setString(3, customer.getAccNum());
+			st.setString(4, customer.getAccCreateDate());
+			st.executeUpdate();
+			
+			PreparedStatement st=con.prepareStatement("insert into user(`SSN`, `PPP`, `Rating`, `DateOfLastAct`) values(?,?,?,?)");
+			st.setString(1, customer.getUserSSN());
+			st.setString(2, customer.getPpp());
+			st.setFloat(3, customer.getRating());
+			st.setString(4, customer.getDateLastActive());
+			st.executeUpdate();
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
 		/*Sample data begins*/
 		return "success";
 		/*Sample data ends*/
