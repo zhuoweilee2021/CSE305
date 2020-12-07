@@ -161,7 +161,7 @@ public class CustomerDao {
 
 		    Class.forName("com.mysql.jdbc.Driver");
 		    System.out.println("Connecting to a selected database...");
-		    Connection con = DriverManager.getConnection("jdbc:mysql://mysql4.cs.stonybrook.edu:3306/jeguan","root","badpassword");
+		    Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/jeguan","root","badpassword");
 		    System.out.println("Connected database successfully...");
 		    PreparedStatement st= con.prepareStatement("delete from person where ssn=?");
 		    st.setString(1,customerID);
