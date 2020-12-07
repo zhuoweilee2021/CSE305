@@ -380,22 +380,26 @@ public class CustomerDao {
 	public List<Customer> getHighestRatedCustomer(){
 		List<Customer> customers = new ArrayList<Customer>();
 
-		/*Sample data begins*/
-		for (int i = 0; i < 10; i++) {
-			Customer customer = new Customer();
-			customer.setUserID("111-11-1111");
-			customer.setUserSSN("112-11-1111");
-			customer.setAddress("123 Success Street");
-			customer.setLastName("Lu");
-			customer.setFirstName("Upendra Nath Chaurasia");
-			customer.setCity("Stony Brook");
-			customer.setState("NY");
-			customer.setEmail("uppu_chaur@cs.sunysb.edu");
-			customer.setZipCode(11790);
-			customers.add(customer);
-		}
-		/*Sample data ends*/
+		try {
 
+		    Class.forName("com.mysql.jdbc.Driver");
+		    System.out.println("Connecting to a selected database...");
+		    Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/jeguan","root","badpassword");
+		    System.out.println("Connected database successfully...");
+			Statement st=con.createStatement();
+			ResultSet rs=st.executeQuery("SELECT P.SSN, U.Rating FROM jeguan.user U, jeguan.person P WHERE P.SSN=U.SSN ORDER BY U.Rating DESC;");
+			
+			while(rs.next()) {
+				Customer customer = new Customer();
+				customer.setUserSSN(rs.getString("SSN"));
+				customer.setRating(Integer.valueOf(rs.getString("Rating")));
+				
+				customers.add(customer);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return customers;
 	}
 
