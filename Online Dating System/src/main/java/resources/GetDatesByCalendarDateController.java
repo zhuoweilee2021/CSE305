@@ -1,28 +1,31 @@
 package resources;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import dao.CustomerDao;
+import dao.DateDao;
+import dao.ProfileDao;
+import model.Customer;
+import model.Date;
+import model.Profile;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import dao.DateDao;
-import model.Date;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Servlet implementation class GetDatesByCalendarDateController
  */
-public class GetDatesByCalendarDateController extends HttpServlet {
+public class GetHighlyRatedProfilesController extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public GetDatesByCalendarDateController() {
+    public GetHighlyRatedProfilesController() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -38,15 +41,17 @@ public class GetDatesByCalendarDateController extends HttpServlet {
          * This method redirects to the Customer Listing page
          */
 
-//		String searchKeyword = request.getParameter("calendar_date");
+//		String searchKeyword = request.getParameter("customerName");
 
-        DateDao dao = new DateDao();
-        List<Date> dates = new ArrayList<>();
-        dates = dao.getDatesByCalendar("12-12-2020");
+        
+  
+        ProfileDao dao= new ProfileDao();
+        
+        List<Profile> highRateProfiles = dao.getHighestRatedProfiles();
 
-        request.setAttribute("date","12-12-2020");
-        request.setAttribute("dates", dates);
-        RequestDispatcher rd = request.getRequestDispatcher("showDatesByCalendar.jsp");
+
+        request.setAttribute("profiles",highRateProfiles);
+        RequestDispatcher rd = request.getRequestDispatcher("showHighlyRatedProfile.jsp");
         rd.forward(request, response);
 
     }

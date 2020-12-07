@@ -5,6 +5,7 @@ import dao.DateDao;
 import dao.ProfileDao;
 import model.Customer;
 import model.Date;
+import model.Profile;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -42,12 +43,14 @@ public class GetHighlyRatedProfilesController extends HttpServlet {
 
 //		String searchKeyword = request.getParameter("customerName");
 
-        List<String> highRateProfiles = new ArrayList<>();
-        for(int i=0;i<10;i++)
-            highRateProfiles.add("Vikram2");
+        
+  
+        ProfileDao dao= new ProfileDao();
+        
+        List<Profile> highRateProfiles = dao.getHighestRatedProfiles();
+
 
         request.setAttribute("profiles",highRateProfiles);
-        request.setAttribute("rate","34");
         RequestDispatcher rd = request.getRequestDispatcher("showHighlyRatedProfile.jsp");
         rd.forward(request, response);
 

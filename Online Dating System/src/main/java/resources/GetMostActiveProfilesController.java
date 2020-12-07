@@ -36,11 +36,12 @@ public class GetMostActiveProfilesController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 //		String searchKeyword = request.getParameter("customerName");
+    	
+    	ProfileDao dao= new ProfileDao();
 
-        List<String> mostActiveProfiles = new ArrayList<>();
-        for(int i=0;i<10;i++)
-            mostActiveProfiles.add("Vikram");
-
+        List<Profile> mostActiveProfiles = dao.mostActiveProfiles();
+        
+        
         request.setAttribute("profiles",mostActiveProfiles);
         request.setAttribute("activationRate","21");
         RequestDispatcher rd = request.getRequestDispatcher("showMostActiveProfile.jsp");

@@ -15,7 +15,8 @@ public class LikesDao {
 	 * This class handles all the database operations related to the customer table
 	 */
 	public String setNewLike(String user1, String user2){
-		
+
+	    String name=user1;
 		try {
 		    Class.forName("com.mysql.jdbc.Driver");
 		    System.out.println("Connecting to a selected database...");
@@ -34,11 +35,16 @@ public class LikesDao {
 			    st2.setTimestamp(3, new Timestamp(System.currentTimeMillis()));
 			    st2.executeUpdate();
 		    }
-		   
+		    Statement st2= con.createStatement();
+		    ResultSet rs2= st2.executeQuery("SELECT concat_ws(' ',FirstName,LastName) as Name FROM Person B WHERE email like \'%"+user1+"%\' limit 1");
+		    if(rs2.next()) {
+		    	name=rs2.getString("Name");
+		    }
+		    
 		} catch(Exception e) {
 			System.out.println(e);
 		}
-		return "User - "+user1+" likes "+user2;
+		return "User - "+name+" likes "+user2;
 	}
 
 	public List<String> getFavorites(String email){
