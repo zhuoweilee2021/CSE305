@@ -96,7 +96,7 @@ public class DateDao {
 			
 			while(rs.next()) {
 				Date date = new Date();
-				date.setDateID(String.valueOf((Math.floor(Math.random() * 1000000))));
+				date.setDateID(rs.getString("DateID"));
 	            date.setUser1ID(rs.getString("Profile1"));
 	            date.setUser2ID(rs.getString("Profile2"));
 	            date.setDate(rs.getString("Date_Time"));
@@ -127,13 +127,13 @@ public class DateDao {
 		    Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/jeguan","root","badpassword");
 		    System.out.println("Connected database successfully...");
 
-		    PreparedStatement st= con.prepareStatement("SELECT P.FirstName, P.LastName, D.* FROM date D, person P WHERE D.CustRep = P.SSN AND MONTH(Date_Time)=? AND YEAR(Date_Time)=?;");
+		    PreparedStatement st= con.prepareStatement("SELECT P.FirstName, P.LastName, D.* FROM date D, person P WHERE D.CustRep = P.SSN AND MONTH(Date_Time)=?;");
 			st.setString(1, customerName);
 			ResultSet rs=st.executeQuery();
 			
 			while(rs.next()) {
 				Date date = new Date();
-				date.setDateID(String.valueOf((Math.floor(Math.random() * 1000000))));
+				date.setDateID(rs.getString("DateID"));
 	            date.setUser1ID(rs.getString("Profile1"));
 	            date.setUser2ID(rs.getString("Profile2"));
 	            date.setDate(rs.getString("Date_Time"));
@@ -150,23 +150,6 @@ public class DateDao {
 			e.printStackTrace();
 		}
         
-        /*Sample data begins*/
-        for (int i = 0; i < 10; i++) {
-            Date date = new Date();
-            date.setDateID("12313123");
-            date.setUser1ID("1212");
-            date.setUser2ID("2121");
-            date.setDate("12-12-2020");
-            date.setGeolocation("location");
-            date.setBookingfee("21");
-            date.setCustRepresentative("Manoj Pandey");
-            date.setComments("Comments");
-            date.setUser1Rating("3");
-            date.setUser2Rating("3");
-            dates.add(date);
-        }
-        /*Sample data ends*/
-
         return dates;
     }
 
@@ -188,7 +171,6 @@ public class DateDao {
 				Date date = new Date();
 				date.setDateID(String.valueOf((Math.floor(Math.random() * 1000000))));
 	            date.setDate(rs.getString("Date_Time"));
-	            //date.setUser1Rating(rs.getString("User1Rating"));
 	            date.setUser2Rating(rs.getString("AvgRating"));
 				dates.add(date);
 			}
@@ -205,35 +187,105 @@ public class DateDao {
 
         List<Date> dates = new ArrayList<Date>();
 
-        /*Sample data begins*/
-        for (int i = 0; i < 10; i++) {
-            Date date = new Date();
-            date.setDateID("12313123");
-            date.setUser1ID("1212");
-            date.setUser2ID("2121");
-            date.setDate("12-12-2020");
-            date.setGeolocation("location");
-            date.setBookingfee("21");
-            date.setCustRepresentative("Manoj Pandey");
-            date.setComments("Comments");
-            date.setUser1Rating("3");
-            date.setUser2Rating("3");
-            dates.add(date);
-        }
-        /*Sample data ends*/
+        try {
 
+		    Class.forName("com.mysql.jdbc.Driver");
+		    System.out.println("Connecting to a selected database...");
+		    Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/jeguan","root","badpassword");
+		    System.out.println("Connected database successfully...");
+
+		    Statement st=con.createStatement();
+			ResultSet rs=st.executeQuery("SELECT E.FirstName, E.LastName, D.* FROM date D, employee E WHERE D.CustRep=E.SSN");
+			
+			while(rs.next()) {
+				Date date = new Date();
+				date.setDateID(rs.getString("DateID"));
+	            date.setUser1ID(rs.getString("Profile1"));
+	            date.setUser2ID(rs.getString("Profile2"));
+	            date.setDate(rs.getString("Date_Time"));
+	            date.setGeolocation(rs.getString("Location"));
+	            date.setBookingfee(rs.getString("BookingFee"));
+	            date.setCustRepresentative(rs.getString("FirstName") + " " + rs.getString("LastName"));
+	            date.setComments(rs.getString("Comments"));
+	            date.setUser1Rating(rs.getString("User1Rating"));
+	            date.setUser2Rating(rs.getString("User2Rating"));
+	            dates.add(date);
+			}
+
+        } catch(Exception e) {
+			e.printStackTrace();
+		}
+        
         return dates;
     }
 
     public String setNewDate(String user1, String user2) {
+    	
+    	try {
+
+		    Class.forName("com.mysql.jdbc.Driver");
+		    System.out.println("Connecting to a selected database...");
+		    Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/jeguan","root","badpassword");
+		    System.out.println("Connected database successfully...");
+		    
+			PreparedStatement st2=con.prepareStatement("insert into date(`DateID`,`Profile1`, `Profile2`) values(?,?,?)");
+			st2.setString(1, String.valueOf((Math.floor(Math.random() * 1000000))));
+			st2.setString(2, user1);
+			st2.setString(3, user2);
+			st2.executeUpdate();
+			
+			//moveToInsertRow() or moveToCurrentRow() MIGHT WANNA LOOK INTO THIS PUT IN A WHILE LOOP?
+		} catch(Exception e) {
+			e.printStackTrace();
+			return "failure";
+		}
+    	
         return "Successfull date b/w " + user1 + " and " + user2;
     }
 
     public String cancelDate(String dateID) {
+    	
+    	try {
+
+		    Class.forName("com.mysql.jdbc.Driver");
+		    System.out.println("Connecting to a selected database...");
+		    Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/jeguan","root","badpassword");
+		    System.out.println("Connected database successfully...");
+		    
+			PreparedStatement st2=con.prepareStatement("delete from date where DateID=?");
+			st2.setString(1, dateID);
+			st2.executeUpdate();
+			
+			//moveToInsertRow() or moveToCurrentRow() MIGHT WANNA LOOK INTO THIS PUT IN A WHILE LOOP?
+		} catch(Exception e) {
+			e.printStackTrace();
+			return "failure";
+		}
+
+    	
         return "Date - " + dateID + " is now cancelled";
     }
 
     public String commentDate(String dateID, String comment) {
+    	
+    	try {
+
+		    Class.forName("com.mysql.jdbc.Driver");
+		    System.out.println("Connecting to a selected database...");
+		    Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/jeguan","root","badpassword");
+		    System.out.println("Connected database successfully...");
+		    
+			PreparedStatement st2=con.prepareStatement("update date set Comment=? where DateID=?");
+			st2.setString(1, comment);
+			st2.setString(2, dateID);
+			st2.executeUpdate();
+			
+			//moveToInsertRow() or moveToCurrentRow() MIGHT WANNA LOOK INTO THIS PUT IN A WHILE LOOP?
+		} catch(Exception e) {
+			e.printStackTrace();
+			return "failure";
+		}
+    	
         return "Date - " + dateID + " has new comment - " + comment;
     }
 
