@@ -49,6 +49,10 @@ public class UpdateCustomerController extends HttpServlet {
 		String ssn = request.getParameter("customerSSN");
 		String creditCard = request.getParameter("customerCreditCard");
 		int rating = Integer.parseInt(request.getParameter("customerRating"));
+		String accNum = request.getParameter("customerAcc");
+		String accCreateDate = request.getParameter("customerAccCreate");
+		String dateLastActive = request.getParameter("customerLastActive");
+		String ppp = request.getParameter("ppp");
 		
 		Customer customer = new Customer();
 		customer.setEmail(email);
@@ -62,6 +66,12 @@ public class UpdateCustomerController extends HttpServlet {
 		customer.setUserID(ssn);
 		customer.setCreditCard(creditCard);
 		customer.setRating(rating);
+		customer.setAccCreateDate(accCreateDate);
+		customer.setAccNum(accNum);
+		customer.setDateLastActive(dateLastActive);
+		customer.setPpp(ppp);
+		
+		System.out.println("edting customer");
 		
 		CustomerDao customerDao = new CustomerDao();
 		String result = customerDao.editCustomer(customer);

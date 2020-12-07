@@ -33,7 +33,7 @@
 			<c:forEach items="${customers}" var="cd">
 				<tr>
 					<td>${cd.userSSN}</td>
-					<td>35</td>
+					<td>${cd.TotalDates}</td>
 				</tr>
 			</c:forEach>
 			</tbody>

@@ -37,9 +37,10 @@ public class EditCustomerController extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		String customerID = request.getParameter("userID");
+		String customerAccNum = request.getParameter("accNum");
 		
 		CustomerDao customerDao = new CustomerDao();
-		Customer editCustomer = customerDao.getCustomer(customerID);
+		Customer editCustomer = customerDao.getCustomer(customerID, customerAccNum);
 		
 		request.getSession(true).setAttribute("editCustomer", editCustomer);
 		response.sendRedirect("editCustomer.jsp");

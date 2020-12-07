@@ -74,6 +74,7 @@
 		         	<form method="POST" action="editCustomer">
 						<div class="form-group">
 			            	<input type="hidden" class="form-control" name="userID" value=${cd.userID}>
+			            	<input type="hidden" class="form-control" name="accNum" value=${cd.accNum}>
 			        	</div>
 						<input type="submit" value="Edit" class="btn btn-success"/>
 					</form>
