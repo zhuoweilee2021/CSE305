@@ -30,7 +30,7 @@
 					    <h5 class="card-title">Search by Customer</h5>
     					<div class="container">
 							<form method="POST" action="searchDatedUsersByCustomerName">
-								<label for="customerName">Customer Name:</label>
+								<label for="customerName">Customer Name(ID):</label>
 	    						<input type="text" class="form-control" id="customerName" name="customerName" placeholder="Type Customer Name">
 								<br/>
 								<input type="submit" value="Search" class="btn btn-primary btn-bet"/>

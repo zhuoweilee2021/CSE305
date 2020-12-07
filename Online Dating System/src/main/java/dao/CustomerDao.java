@@ -414,6 +414,7 @@ public class CustomerDao {
 				customer.setCity(rs.getString("City"));
 				customer.setState(rs.getString("State"));
 				customer.setZipCode(rs.getInt("Zipcode"));
+				customer.setAccNum(rs.getString("TotalDates"));
 				customers.add(customer);
 			}
 			
@@ -546,14 +547,43 @@ public class CustomerDao {
 		    System.out.println("Connecting to a selected database...");
 		    Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/jeguan","root","password");
 		    System.out.println("Connected database successfully...");
+		    
+		    PreparedStatement st2= con.prepareStatement("select ProfileID from profile where OwnerSSN=?;");
+		    st2.setString(1, userID);
+		    ResultSet rs2 = st2.executeQuery();
+		    String prof = "";
+		    while(rs2.next()) {
+		    	prof = rs2.getString("ProfileID");
+		    }
+		    
+		    
 			PreparedStatement st= con.prepareStatement("SELECT S.Suggestion, SUM(S.Rating) as TotalRating FROM (SELECT D.Profile2 AS Suggestion, D.User2Rating AS Rating FROM jeguan.date D WHERE D.Profile1=? UNION ALL SELECT D.Profile1 AS Suggestion, D.User1Rating AS Rating FROM jeguan.date D WHERE D.Profile2=? ) S GROUP BY S.Suggestion ORDER BY SUM(S.Rating) DESC;");
-			st.setString(1, userID);
-			st.setString(2, userID);
+			st.setString(1, prof);
+			st.setString(2, prof);
 			ResultSet rs=st.executeQuery();
 
 			
 			while(rs.next()) {
+				PreparedStatement tempSt= con.prepareStatement("select P.*, A.CardNumber from jeguan.person P, jeguan.account A, jeguan.profile Pr"
+						+ "where Pr.ProfileID=? and P.SSN=Pr.OwnerSSN and A.OwnerSSN=P.SSN "
+						+ "group by P.SSN");
+				tempSt.setString(1, rs.getString("Suggestion"));
+				ResultSet tempRs = tempSt.executeQuery();
 				Customer customer = new Customer();
+				
+				while(tempRs.next()) {
+					customer.setUserSSN(tempRs.getString("SSN"));
+					customer.setFirstName(tempRs.getString("FirstName"));
+					customer.setLastName(tempRs.getString("LastName"));
+					customer.setAddress(tempRs.getString("Street"));
+					customer.setCity(tempRs.getString("City"));
+					customer.setState(tempRs.getString("State"));
+					customer.setZipCode(tempRs.getInt("Zipcode"));
+					customer.setTelephone(tempRs.getString("Telephone"));
+					customer.setEmail(tempRs.getString("Email"));
+					customer.setCreditCard(tempRs.getString("CardNumber"));
+				}
+				
 				customer.setUserID(rs.getString("Suggestion"));
 				customer.setRating(Integer.valueOf(rs.getString("TotalRating")));
 				customers.add(customer);

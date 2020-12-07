@@ -11,6 +11,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.List;
 
 /**
@@ -38,10 +42,10 @@ public class GetDatesSuggestionsController extends HttpServlet {
          * This method redirects to the Customer Listing page
          */
 
-//		String searchKeyword = request.getParameter("customerName");
-
+		String email = request.getParameter("email");
+	   
         DateDao dao = new DateDao();
-        List<Date> dates = dao.getDateSuggestions("Vikram");
+        List<Date> dates = dao.getDateSuggestions(email);
 
         request.setAttribute("dates",dates);
         RequestDispatcher rd = request.getRequestDispatcher("showDateSuggestions.jsp");
