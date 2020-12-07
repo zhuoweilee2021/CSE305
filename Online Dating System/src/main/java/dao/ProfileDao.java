@@ -1,6 +1,8 @@
 package dao;
 
 import model.Customer;
+import model.Date;
+
 import java.sql.*;
 import model.Profile;
 
@@ -152,6 +154,62 @@ public class ProfileDao {
     	}
 
         return profiles;
+    }
+    
+    public List<Profile> getHighestRatedProfiles(){
+    	
+    	List<Profile> profiles = new ArrayList<>();
+    	try {
+
+		    Class.forName("com.mysql.jdbc.Driver");
+		    System.out.println("Connecting to a selected database...");
+		    Connection con = DriverManager.getConnection("jdbc:mysql://mysql4.cs.stonybrook.edu:3306/jeguan","jeguan","111681093");
+		    System.out.println("Connected database successfully...");
+		    
+		    Statement st=con.createStatement();
+		    ResultSet rs= st.executeQuery("SELECT ProfileID, Rating FROM User u, Profile p WHERE u.SSN = p.OwnerSSN AND Rating >=3 ORDER BY Rating DESC");
+		    
+		    while(rs.next()) {
+	            Profile profile = new Profile();
+	            profile.setProfileName(rs.getString("ProfileID"));
+	            profile.setAge(rs.getString("Rating"));
+	            profiles.add(profile);
+		    }
+		    
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+    	return profiles;
+    }
+    
+    public List<Profile> mostActiveProfiles(){
+    	List<Profile> dates = new ArrayList<>();
+        
+        try {
+
+		    Class.forName("com.mysql.jdbc.Driver");
+		    System.out.println("Connecting to a selected database...");
+		    Connection con = DriverManager.getConnection("jdbc:mysql://mysql4.cs.stonybrook.edu:3306/jeguan","jeguan","111681093");
+		    System.out.println("Connected database successfully...");
+		    
+		    Statement st= con.createStatement();
+		    ResultSet rs = st.executeQuery("SELECT profile, COUNT(profile) as active from\r\n"
+		    		+ "(SELECT Profile1 AS Profile FROM jeguan.date\r\n"
+		    		+ "UNION ALL\r\n"
+		    		+ "SELECT Profile2 AS Profile FROM jeguan.date) as A GROUP BY Profile ORDER BY active desc;\r\n"
+		    		+ "");
+		    
+		    while(rs.next()) {
+		    	Profile date= new Profile();
+		    	date.setProfileName(rs.getString("profile"));
+		    	date.setAge(rs.getString("active"));
+		    	dates.add(date);
+		    }
+		    
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+        return dates;
     }
 
 }
