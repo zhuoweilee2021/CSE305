@@ -114,7 +114,7 @@
 								<br/>
 								<form action="popularGeoLocation">
 									<div class="form-group">
-										<input type="hidden" class="form-control" name="email" value='${email}'>
+										<input type="hidden" class="form-control" name="location" value='${email}'>
 									</div>
 									<input type="submit" value="Popular Geo Locations" class="btn btn-success"/>
 								</form>
