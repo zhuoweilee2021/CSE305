@@ -30,8 +30,9 @@ public class DateDao {
 			st2.setString(4, date.getDate());
 			st2.setString(5, date.getGeolocation());
 			st2.setString(6, date.getBookingfee());
-			st2.setString(7, date.getUser1Rating());
-			st2.setString(8, date.getUser2Rating());
+			st2.setString(7, date.getComments());
+			st2.setString(8, date.getUser1Rating());
+			st2.setString(9, date.getUser2Rating());
 			st2.executeUpdate();
 			
 			
@@ -164,12 +165,11 @@ public class DateDao {
 		    System.out.println("Connected database successfully...");
 
 		    Statement st=con.createStatement();
-			ResultSet rs=st.executeQuery("SELECT R.Date, R.User1Rating ,AVG(R.TotalRating) as AvgRating FROM  ((SELECT CAST(D.Date_Time AS DATE) AS Date, SUM(D.User1Rating) AS TotalRating FROM date D GROUP BY CAST(D.Date_Time AS DATE) ORDER BY SUM(D.User1Rating) DESC) UNION ALL (SELECT CAST(D.Date_Time AS DATE) AS Date, SUM(D.User2Rating) AS TotalRating FROM date D GROUP BY CAST(D.Date_Time AS DATE) ORDER BY SUM(D.User2Rating) DESC )) R GROUP BY R.Date ORDER BY AVG(R.TotalRating) DESC;\n"
-					+ "");
+			ResultSet rs=st.executeQuery("SELECT R.DateID, R.DATE, R.User1Rating ,AVG(R.TotalRating) as AvgRating FROM  ((SELECT CAST(D.Date_Time AS DATE) AS Date, SUM(D.User1Rating) AS TotalRating FROM date D GROUP BY CAST(D.Date_Time AS DATE) ORDER BY SUM(D.User1Rating) DESC) UNION ALL (SELECT CAST(D.Date_Time AS DATE) AS Date, SUM(D.User2Rating) AS TotalRating FROM date D GROUP BY CAST(D.Date_Time AS DATE) ORDER BY SUM(D.User2Rating) DESC )) R GROUP BY R.Date ORDER BY AVG(R.TotalRating) DESC;");
 			
 			while(rs.next()) {
 				Date date = new Date();
-				date.setDateID(String.valueOf((Math.floor(Math.random() * 1000000))));
+				date.setDateID(rs.getString("DateID"));
 	            date.setDate(rs.getString("Date_Time"));
 	            date.setUser2Rating(rs.getString("AvgRating"));
 				dates.add(date);
@@ -195,7 +195,7 @@ public class DateDao {
 		    System.out.println("Connected database successfully...");
 
 		    Statement st=con.createStatement();
-			ResultSet rs=st.executeQuery("SELECT E.FirstName, E.LastName, D.* FROM date D, employee E WHERE D.CustRep=E.SSN");
+			ResultSet rs=st.executeQuery("SELECT P.FirstName, P.LastName, D.* FROM date D, person P WHERE D.CustRep=P.SSN");
 			
 			while(rs.next()) {
 				Date date = new Date();
@@ -275,7 +275,7 @@ public class DateDao {
 		    Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/jeguan","root","badpassword");
 		    System.out.println("Connected database successfully...");
 		    
-			PreparedStatement st2=con.prepareStatement("update date set Comment=? where DateID=?");
+			PreparedStatement st2=con.prepareStatement("update date set Comments=? where DateID=?");
 			st2.setString(1, comment);
 			st2.setString(2, dateID);
 			st2.executeUpdate();
