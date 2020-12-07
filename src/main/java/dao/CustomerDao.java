@@ -249,7 +249,7 @@ public class CustomerDao {
 			PreparedStatement st3=con.prepareStatement("insert into user(`SSN`, `PPP`, `Rating`, `DateOfLastAct`) values(?,?,?,?)");
 			st.setString(1, customer.getUserSSN());
 			st.setString(2, customer.getPpp());
-			st.setFloat(3, customer.getRating());
+			st.setInt(3, Integer.valueOf(customer.getRating()));
 			st.setString(4, customer.getDateLastActive());	
 			st3.executeUpdate();
 			
@@ -299,7 +299,7 @@ public class CustomerDao {
 			PreparedStatement st3=con.prepareStatement("update user(`SSN`, `PPP`, `Rating`, `DateOfLastAct`) values(?,?,?,?)");
 			st.setString(1, customer.getUserSSN());
 			st.setString(2, customer.getPpp());
-			st.setFloat(3, customer.getRating());
+			st.setInt(3, Integer.valueOf(customer.getRating()));
 			st.setString(4, customer.getDateLastActive());	
 			st3.executeUpdate();
 			
@@ -352,20 +352,27 @@ public class CustomerDao {
 
 		List<Customer> customers = new ArrayList<Customer>();
 
-		/*Sample data begins*/
-		for (int i = 0; i < 10; i++) {
-			Customer customer = new Customer();
-			customer.setUserID("111-11-1111");
-			customer.setAddress("123 Success Street");
-			customer.setLastName("Lu");
-			customer.setFirstName("Upendra Nath Chaurasia");
-			customer.setCity("Stony Brook");
-			customer.setState("NY");
-			customer.setEmail("uppu_chaur@cs.sunysb.edu");
-			customer.setZipCode(11790);
-			customers.add(customer);
+		try {
+
+		    Class.forName("com.mysql.jdbc.Driver");
+		    System.out.println("Connecting to a selected database...");
+		    Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/jeguan","root","badpassword");
+		    System.out.println("Connected database successfully...");
+			PreparedStatement st= con.prepareStatement("SELECT Profile1SSN, Profile1, Profile2, OwnerSSN AS Profile2SSN FROM (SELECT OwnerSSN AS Profile1SSN, Profile1 AS Profile1, Profile2 AS Profile2 FROM Date D, Profile P WHERE D.Profile1=P.ProfileID UNION ALL SELECT OwnerSSN AS Profile1SSN, Profile2 AS Profile1, Profile1 AS Profile2 FROM Date D, Profile P WHERE D.Profile2=P.ProfileID) AS CUSTOMERS, Profile P WHERE CUSTOMERS.Profile2=P.ProfileID AND Profile1SSN=?;");
+			st.setString(1, primary);
+			ResultSet rs=st.executeQuery();
+
+			
+			while(rs.next()) {
+				Customer customer = new Customer();
+				customer.setUserID(rs.getString("Profile1SSN"));
+				customer.setUserSSN(rs.getString("Profile2SSN"));
+				customers.add(customer);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		/*Sample data ends*/
 
 		return customers;
 	}
