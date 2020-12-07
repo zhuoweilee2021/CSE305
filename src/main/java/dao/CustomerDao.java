@@ -167,6 +167,14 @@ public class CustomerDao {
 		    st.setString(1,customerID);
 		    st.executeUpdate();
 		    
+		    PreparedStatement st2= con.prepareStatement("delete from user where ssn=?");
+		    st2.setString(1,customerID);
+		    st2.executeUpdate();
+		    
+		    PreparedStatement st3= con.prepareStatement("delete from account where ownerssn=?");
+		    st3.setString(1,customerID);
+		    st3.executeUpdate();
+		    
 		} catch(Exception e) {
 			System.out.println(e);
 			return "failure";
@@ -238,12 +246,12 @@ public class CustomerDao {
 			st.setString(4, customer.getAccCreateDate());
 			st.executeUpdate();
 			
-			PreparedStatement st=con.prepareStatement("insert into user(`SSN`, `PPP`, `Rating`, `DateOfLastAct`) values(?,?,?,?)");
+			PreparedStatement st3=con.prepareStatement("insert into user(`SSN`, `PPP`, `Rating`, `DateOfLastAct`) values(?,?,?,?)");
 			st.setString(1, customer.getUserSSN());
 			st.setString(2, customer.getPpp());
 			st.setFloat(3, customer.getRating());
-			st.setString(4, customer.getDateLastActive());
-			st.executeUpdate();
+			st.setString(4, customer.getDateLastActive());	
+			st3.executeUpdate();
 			
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -264,6 +272,41 @@ public class CustomerDao {
 		 * You need to handle the database update and return "success" or "failure" based on result of the database update.
 		 */
 		
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/jeguan","root","badpassword");
+					
+			PreparedStatement st2=con.prepareStatement("update person(`SSN`, `FirstName`, `LastName`,`Street`, `City`,`State`,`Zipcode`,`Email`,`Telephone`) values(?,?,?,?,?,?,?,?,?)");
+			st2.setString(1, customer.getUserSSN());
+			st2.setString(2, customer.getFirstName());
+			st2.setString(3, customer.getLastName());
+			st2.setString(4, customer.getAddress());
+			st2.setString(5, customer.getCity());
+			st2.setString(6, customer.getState());
+			st2.setInt(7, customer.getZipCode());
+			st2.setString(8, customer.getEmail());
+			st2.setString(9, customer.getTelephone());
+			st2.executeUpdate();
+			
+			
+			PreparedStatement st=con.prepareStatement("update account(`OwnerSSN`, `CardNumber`, `AcctNum`, `AcctCreationDate`) values(?,?,?,?)");
+			st.setString(1, customer.getUserSSN());
+			st.setString(2, customer.getCreditCard());
+			st.setString(3, customer.getAccNum());
+			st.setString(4, customer.getAccCreateDate());
+			st.executeUpdate();
+			
+			PreparedStatement st3=con.prepareStatement("update user(`SSN`, `PPP`, `Rating`, `DateOfLastAct`) values(?,?,?,?)");
+			st.setString(1, customer.getUserSSN());
+			st.setString(2, customer.getPpp());
+			st.setFloat(3, customer.getRating());
+			st.setString(4, customer.getDateLastActive());	
+			st3.executeUpdate();
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
 		/*Sample data begins*/
 		return "success";
 		/*Sample data ends*/
@@ -272,24 +315,35 @@ public class CustomerDao {
 
 
 
-	public List<Customer>  getMostActiveUser(){
+	public List<Customer>  getMostActiveUser() {
 		List<Customer> customers = new ArrayList<Customer>();
 
-		/*Sample data begins*/
-		for (int i = 0; i < 10; i++) {
-			Customer customer = new Customer();
-			customer.setUserID("111-11-1111");
-			customer.setUserSSN("112-11-1111");
-			customer.setAddress("123 Success Street");
-			customer.setLastName("Lu");
-			customer.setFirstName("Upendra Nath Chaurasia");
-			customer.setCity("Stony Brook");
-			customer.setState("NY");
-			customer.setEmail("uppu_chaur@cs.sunysb.edu");
-			customer.setZipCode(11790);
-			customers.add(customer);
+		try {
+
+		    Class.forName("com.mysql.jdbc.Driver");
+		    System.out.println("Connecting to a selected database...");
+		    Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/jeguan","root","badpassword");
+		    System.out.println("Connected database successfully...");
+			Statement st=con.createStatement();
+			ResultSet rs=st.executeQuery("SELECT S.OwnerSSN, P1.Email, P1.FirstName, P1.LastName, P1.Street, P1.City, P1.State, P1.Zipcode, SUM(S.TotalDates) AS TotalDates FROM person P1, (SELECT DISTINCT P.OwnerSSN, P.ProfileID AS ProfileKey, (SELECT COUNT(Profile1) FROM Date D WHERE ProfileKey=Profile1)+(SELECT COUNT(Profile2) FROM Date D WHERE ProfileKey=Profile2) AS TotalDates FROM Date D, Profile P ORDER BY TotalDates DESC ) S WHERE S.OwnerSSN = P1.SSN GROUP BY S.OwnerSSN ORDER BY SUM(S.TotalDates) DESC");
+			
+			while(rs.next()) {
+				Customer customer = new Customer();
+				customer.setUserID(rs.getString("OwnerSSN"));
+				customer.setUserSSN(rs.getString("OwnerSSN"));
+				customer.setEmail(rs.getString("Email"));
+				customer.setFirstName(rs.getString("FirstName"));
+				customer.setLastName(rs.getString("LastName"));
+				customer.setAddress(rs.getString("Street"));
+				customer.setCity(rs.getString("City"));
+				customer.setState(rs.getString("State"));
+				customer.setZipCode(rs.getInt("Zipcode"));
+				customers.add(customer);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		/*Sample data ends*/
 
 		return customers;
 	}
